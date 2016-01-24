@@ -1,0 +1,22 @@
+{% extends 'bootstrap.html' %}
+
+{% block content %}
+<br/>
+<br/>
+<div class="row">
+    <div class="page-header">
+        <h1>Lookup <small>{{ root.url }}</small></h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-2">
+        <div class="page-header"><h2>Query Details</h2></div>
+        <dl class="dl-horizontal">
+            <dt>FQDN</dt><dd>{{ root.fqdn }}</dd>
+            <dt>Query Time</dt><dd>{{ root.queriedAt }}</dd>
+        </dl>
+    </div>
+</div>
+
+{% endblock %}

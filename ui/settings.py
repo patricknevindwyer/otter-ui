@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap3'
+    'bootstrap3',
+    'core',
+    'django.contrib.humanize'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -115,6 +117,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+# Control URLs
+COORDINATOR_URL = "http://localhost:3000/"
+SERVICE_DNS_URL = "http://localhost:5000/"
+SERVICE_CACHEDDNS_URL = "http://localhost:6000/"
+SERVICE_GOOGLEDNS_URL = "http://localhost:7000/"
+SERVICE_OPENNICDNS_URL = "http://localhost:9000/"
+
+# TODO: break OpenNIC queries into separate geographic entities
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
