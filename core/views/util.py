@@ -1,6 +1,8 @@
+from django.conf import settings
 from urllib.parse import urlparse
 from core.models import Url
 import base64
+import requests
 
 def fillContext(opts, request):
     """
@@ -14,6 +16,19 @@ def fillContext(opts, request):
         opts["request"] = request
 
     return opts
+
+def resolveIps(uuid, ipv4s):
+    """
+    Given a block of IP addresses as a list, fire off resolution for them
+    :param ipv4s:
+    :return:
+    """
+    for ipv4 in ipv4s:
+        blob = {
+            "uuid": str(uuid),
+            "ip": ipv4
+        }
+        requests.post(settings.COORDINATOR_URL + "resolve/ip", json=blob)
 
 class OtterUrl(object):
     """

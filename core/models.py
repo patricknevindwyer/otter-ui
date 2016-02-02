@@ -28,6 +28,23 @@ class Url(models.Model):
         else:
             return ""
 
+class AsnRecord(models.Model):
+    """
+    Connect an IP address to ASN data. This is connected to an IP address
+    as found in a DNS record..
+
+    This model is linked to the URL root model for coherence and lookup.
+    """
+    url = models.ForeignKey(Url, related_name="asns")
+    rawRecord = models.TextField(null=True, blank=True)
+    ip = models.GenericIPAddressField(protocol = "IPv4", blank = True, null = True)
+
+    def formatted(self):
+        if self.rawRecord is not None:
+            return json.dumps(json.loads(self.rawRecord), indent=4)
+        else:
+            return ""
+
 class DnsRecord(models.Model):
     """
     Basic representation of DNS resolved data for a Url

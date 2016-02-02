@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.conf import settings
-from core.models import Url, DnsRecord
+from core.models import Url, DnsRecord, AsnRecord
 import requests
 import json
+
+from core.views import util
 
 def processServiceData(service, path, delete = True, asJson = True):
     """
@@ -26,7 +28,6 @@ def processServiceData(service, path, delete = True, asJson = True):
     else:
         return None
 
-
 def dns(request, uuid):
     """
     Receive the webhook ping from the DNS resolver. The return data is stored directly
@@ -48,6 +49,7 @@ def dns(request, uuid):
             rawRecord = json.dumps(dnsData["result"])
         )
         dnsRecord.save()
+        util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
 
     return HttpResponse("ok")
 
@@ -71,6 +73,7 @@ def cachedDns(request, uuid):
             rawRecord = json.dumps(dnsData["result"])
         )
         dnsRecord.save()
+        util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
 
     return HttpResponse("ok")
 
@@ -94,6 +97,7 @@ def googleDns(request, uuid):
             rawRecord = json.dumps(dnsData["result"])
         )
         dnsRecord.save()
+        util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
 
     return HttpResponse("ok")
 
@@ -117,6 +121,33 @@ def openNicDns(request, uuid):
             rawRecord = json.dumps(dnsData["result"])
         )
         dnsRecord.save()
+        util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
 
     return HttpResponse("ok")
 
+def asn(request, uuid):
+    """
+    Receive the webhook for resolved ASN data. These are triggered from the receipt of
+    DNS data, from which we cull IP addresses.
+
+    :param request:
+    :param uuid:
+    :return:
+    """
+    urlModel = get_object_or_404(Url, uuid = uuid)
+
+    asnData = processServiceData(settings.SERVICE_ASN_URL, "resolved/%s" % (uuid,))
+
+    if asnData is not None:
+        # see if we have any addresses yet, we don't want duplication
+        ip = asnData["result"]["ip"]
+        existingCount = urlModel.asns.filter(ip=ip).count()
+        if existingCount == 0:
+            asnRecord = AsnRecord.objects.create(
+                url = urlModel,
+                rawRecord = json.dumps(asnData["result"]),
+                ip = ip
+            )
+            asnRecord.save()
+
+    return HttpResponse("ok")

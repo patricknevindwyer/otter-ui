@@ -124,6 +124,7 @@ SERVICE_DNS_URL = "http://localhost:5000/"
 SERVICE_CACHEDDNS_URL = "http://localhost:6000/"
 SERVICE_GOOGLEDNS_URL = "http://localhost:7000/"
 SERVICE_OPENNICDNS_URL = "http://localhost:9000/"
+SERVICE_ASN_URL = "http://localhost:11000/"
 
 # TODO: break OpenNIC queries into separate geographic entities
 
