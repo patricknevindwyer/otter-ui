@@ -76,4 +76,21 @@
 </div>
 {% endfor %}
 
+<h1 class="page-header">WHOIS Details</h1>
+
+{% for whoisRecord in url.whois.all %}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">WHOIS <small>based on {{ whoisRecord.url.fqdn }}</small></h2>
+            </div>
+            <div class="panel-body">
+                <pre>{{ whoisRecord.formatted }}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}

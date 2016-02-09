@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.conf import settings
-from core.models import Url, DnsRecord, AsnRecord
+from core.models import Url, DnsRecord, AsnRecord, WhoisRecord
 import requests
 import json
 
@@ -141,13 +141,59 @@ def asn(request, uuid):
     if asnData is not None:
         # see if we have any addresses yet, we don't want duplication
         ip = asnData["result"]["ip"]
-        existingCount = urlModel.asns.filter(ip=ip).count()
+        existingCount = urlModel.asns.filter(ip=ip, source="asn").count()
         if existingCount == 0:
             asnRecord = AsnRecord.objects.create(
                 url = urlModel,
                 rawRecord = json.dumps(asnData["result"]),
-                ip = ip
+                ip = ip,
+                source = "asn"
             )
             asnRecord.save()
 
     return HttpResponse("ok")
+
+def whois(request, uuid):
+    """
+    Receive the webhook for resolved WHOIS data. Whois can be triggered multiple
+    time from every URI lookup, so the incoming UUID is not the URI UUID.
+
+    :param request:
+    :param uuid:
+    :return:
+    """
+
+    whoisData = processServiceData(settings.SERVICE_WHOIS_URL, "resolved/%s" % (uuid,))
+
+    if whoisData is not None:
+
+        # pull out the top level UUID
+        urlUuid = whoisData["result"]["uuid"]
+        isHostLookup = whoisData["result"]["isHostLookup"]
+        whoisJson = whoisData["result"]["result"]
+        query = whoisData["result"]["query"]
+
+        urlModel = get_object_or_404(Url, uuid = urlUuid)
+
+        if isHostLookup:
+            whoisRecord = WhoisRecord.objects.create(
+                url = urlModel,
+                rawRecord = whoisJson
+            )
+            whoisRecord.save()
+
+        else:
+            # make sure we don't already have this record from WHOIS
+            existingCount = urlModel.asns.filter(ip=query, source="whois").count()
+            if existingCount == 0:
+                # with IP based data we can stash in the Asn format
+                asnRecord = AsnRecord.objects.create(
+                    url = urlModel,
+                    rawRecord = json.dumps(whoisJson),
+                    ip = query,
+                    source = "whois"
+                )
+                asnRecord.save()
+
+    return HttpResponse("ok")
+

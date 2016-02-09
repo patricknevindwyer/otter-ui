@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'^webhook/googledns/(?P<uuid>[a-zA-Z0-9\-]+)/ready/?$', webhooks.googleDns, name="webhook-googledns"),
     url(r'^webhook/opennicdns/(?P<uuid>[a-zA-Z0-9\-]+)/ready/?$', webhooks.openNicDns, name="webhook-opennicdns"),
     url(r'^webhook/asn/(?P<uuid>[a-zA-Z0-9\-]+)/ready/?$', webhooks.asn, name="webhook-asn"),
+    url(r'^webhook/whois/(?P<uuid>[a-zA-Z0-9\-]+)/ready/?$', webhooks.whois, name="webhook-whois"),
+
 ]

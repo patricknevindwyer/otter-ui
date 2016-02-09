@@ -38,6 +38,20 @@ class AsnRecord(models.Model):
     url = models.ForeignKey(Url, related_name="asns")
     rawRecord = models.TextField(null=True, blank=True)
     ip = models.GenericIPAddressField(protocol = "IPv4", blank = True, null = True)
+    source = models.CharField(max_length=256, null=False, blank=False)
+
+    def formatted(self):
+        if self.rawRecord is not None:
+            return json.dumps(json.loads(self.rawRecord), indent=4)
+        else:
+            return ""
+
+class WhoisRecord(models.Model):
+    """
+    Connect a Whois record for a host to the URL. Linked to the URL root.
+    """
+    url = models.ForeignKey(Url, related_name="whois")
+    rawRecord = models.TextField(null=True, blank=True)
 
     def formatted(self):
         if self.rawRecord is not None:

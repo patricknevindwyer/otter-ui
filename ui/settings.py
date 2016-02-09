@@ -117,6 +117,10 @@ USE_L10N = True
 
 USE_TZ = True
 
+BOOTSTRAP3 = {
+    'jquery_url': '/static/ui/javascripts/jquery.min.js',
+    'base_url': '/static/ui/',
+}
 
 # Control URLs
 COORDINATOR_URL = "http://localhost:3000/"
@@ -125,6 +129,7 @@ SERVICE_CACHEDDNS_URL = "http://localhost:6000/"
 SERVICE_GOOGLEDNS_URL = "http://localhost:7000/"
 SERVICE_OPENNICDNS_URL = "http://localhost:9000/"
 SERVICE_ASN_URL = "http://localhost:11000/"
+SERVICE_WHOIS_URL = "http://localhost:12000/"
 
 # TODO: break OpenNIC queries into separate geographic entities
 
