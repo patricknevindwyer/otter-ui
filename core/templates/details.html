@@ -6,10 +6,15 @@
 
 <div class="row">
     <h1 class="page-header">{{ url.fqdn }} <small>{{ url.queriedAt }}</small></h1>
-    <div class="col-md-10 col-md-offset-1">
+    <div class="col-md-4">
         <dl class="dl-horizontal">
             <dt>fqdn</dt><dd>{{ url.fqdn }}</dd>
             <dt>URL</dt><dd>{{ url.url }}</dd>
+        </dl>
+    </div>
+    <div class="col-md-4">
+        <dl class="dl-horizontal">
+            <dt>Has MX</dt><dd>{% if url.hasMX %}<span class="glyphicon glyphicon-check"></span>{% endif %}</dd>
         </dl>
     </div>
 </div>

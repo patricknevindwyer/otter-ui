@@ -28,6 +28,17 @@ class Url(models.Model):
         else:
             return ""
 
+    def hasMX(self):
+        """
+        Determine if this Url has a useful set of MX records.
+
+        :return: True or False
+        """
+        allmxs = []
+        [[allmxs.append(mxRecord["exchange"]) for mxRecord in dnsRecord.allMXs()] for dnsRecord in self.dnsRecords.all()]
+        return len(allmxs) > 0
+
+
 class AsnRecord(models.Model):
     """
     Connect an IP address to ASN data. This is connected to an IP address
@@ -100,3 +111,26 @@ class DnsRecord(models.Model):
 
     def formattedCNAME(self):
         return self._formattedRecord("CNAME")
+
+    def allMXs(self):
+        """
+        TODO: Remove after properly implementing the MX record object
+        below.
+        :return:
+        """
+        if self.rawRecord is not None:
+            jsonRecord = json.loads(self.rawRecord)
+            if "MX" in jsonRecord:
+                return jsonRecord["MX"]
+            else:
+                return []
+        else:
+            return []
+
+class MxRecord(models.Model):
+    """
+    MX Record associated with a DNS entry
+    """
+    dnsEntry = models.ForeignKey(DnsRecord, related_name="mxRecords")
+    priority = models.IntegerField(null=True, blank=True)
+    exchange = models.CharField(max_length=65535, null=False, blank=False)
