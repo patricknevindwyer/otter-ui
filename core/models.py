@@ -38,6 +38,15 @@ class Url(models.Model):
         [[allmxs.append(mxRecord["exchange"]) for mxRecord in dnsRecord.allMXs()] for dnsRecord in self.dnsRecords.all()]
         return len(allmxs) > 0
 
+    def hasIPV6(self):
+        """
+        Determine if this Url has a useful IPV6 record
+        :return:
+        """
+        allIpv6s = []
+        [allIpv6s.extend(v6Record.allIPV6s()) for v6Record in self.dnsRecords.all()]
+        return len(allIpv6s) > 0
+
 
 class AsnRecord(models.Model):
     """
@@ -122,6 +131,20 @@ class DnsRecord(models.Model):
             jsonRecord = json.loads(self.rawRecord)
             if "MX" in jsonRecord:
                 return jsonRecord["MX"]
+            else:
+                return []
+        else:
+            return []
+
+    def allIPV6s(self):
+        """
+        TODO: Remove after properly implementing an IPV6 record object
+        :return:
+        """
+        if self.rawRecord is not None:
+            jsonRecord = json.loads(self.rawRecord)
+            if "AAAA" in jsonRecord:
+                return jsonRecord["AAAA"]
             else:
                 return []
         else:
