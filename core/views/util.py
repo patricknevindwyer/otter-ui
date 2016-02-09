@@ -30,6 +30,43 @@ def resolveIps(uuid, ipv4s):
         }
         requests.post(settings.COORDINATOR_URL + "resolve/ip", json=blob)
 
+def commonSearches():
+    """
+    TODO: Move to a model manager for Url
+
+    select distinct fqdn, id, count(*) as freq from core_url group by fqdn order by freq desc;
+
+    :return:
+    """
+    return Url.objects.raw(
+        """
+          select distinct fqdn, id, count(*) as freq
+            from core_url
+        group by fqdn
+        order by freq desc
+           limit 10
+        """
+    )
+
+def recentSearches():
+    """
+    TODO: Move to a model manager for Url
+
+    select distinct fqdn, max(queriedAt), count(*) as freq from core_url group by fqdn order by queriedAt desc;
+
+    :return:
+    """
+    return Url.objects.raw(
+        """
+                select distinct fqdn, id, max(queriedAt), count(*) as freq
+                  from core_url
+              group by fqdn
+              order by queriedAt desc
+                limit 10
+        """
+    )
+
+
 class OtterUrl(object):
     """
     Wrapper library for manipulating URLs

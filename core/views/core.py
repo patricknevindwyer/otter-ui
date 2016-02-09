@@ -9,5 +9,8 @@ def index(request):
     :param request:
     :return:
     """
-    opts = {}
+    opts = {
+        "recent": util.recentSearches(),
+        "common": util.commonSearches()
+    }
     return render(request, "index.html", util.fillContext(opts, request))

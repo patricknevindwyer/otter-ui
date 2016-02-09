@@ -5,5 +5,23 @@
 <br/>
 {% include 'partials/search.html' %}
 
+<div class="row">
+    <div class="col-md-6">
+            <h4>Recent Searches</h4>
+        <ul>
+            {% for url in recent %}
+            <li><a href="{% url 'lookup-details' url.uuid %}">{{ url.fqdn }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h4>Common Searches</h4>
+        <ul>
+            {% for url in common %}
+            <li><a href="{% url 'lookup-details' url.uuid %}">{{ url.fqdn }}</a> <span class="badge badge-info">{{ url.freq }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 {% endblock %}
