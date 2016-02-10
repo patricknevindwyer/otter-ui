@@ -5,15 +5,12 @@
 <br/>
 {% include 'partials/search.html' %}
 
-<div class="row">
-    <div class="col-md-8 col-md-offset-2">
-        <h3><a href="{% url 'lookup-start' query.queryBase64 %}"><span class="glyphicon glyphicon-plus"></span> Start new lookup for <em>{{ query.fqdn }}</em></a></h3>
-    </div>
-</div>
 {% for match in matches %}
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
         <h3><a href="{% url 'lookup-details' match.uuid %}">{{ match.fqdn }}</a> <small>{{ match.queriedAt|naturaltime }}</small></h3>
+        <p>Resolved {{ queryCount }} times</p>
+        <p><a href="{% url 'lookup-start' query.queryBase64 %}"><span class="glyphicon glyphicon-plus"></span> Run a new lookup for <em>{{ query.fqdn }}</em></a></p>
         <hr/>
     </div>
 </div>

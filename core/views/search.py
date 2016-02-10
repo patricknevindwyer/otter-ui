@@ -23,11 +23,26 @@ def search(request):
         # see if we have this search term yet
         otterUrl = util.OtterUrl(rawUrl)
 
+        # TODO: This is just... fucking broken as hell. Needs to be a real query, with
+        #       real mappings, and real search...
+
         # try and look this up
-        queryRoot = Url.objects.filter(url = otterUrl.id()).order_by("-queriedAt").all()
+        #queryRoot = Url.objects.raw(
+        #    """
+        #      select distinct fqdn, id, count(*) as freq, queriedAt
+        #        from core_url
+        #       where fqdn = "%s"
+        #    group by fqdn
+        #    order by queriedAt desc
+        #    """,
+        #    otterUrl.id()
+        #)
+        queryRoot = [Url.objects.filter(url = otterUrl.id()).order_by("-queriedAt").first()]
+        queryCount = Url.objects.filter(url = otterUrl.id()).count()
 
         opts["matches"] = queryRoot
         opts["query"] = otterUrl
+        opts["queryCount"] = queryCount
 
         return render(request, "search.html", util.fillContext(opts, request))
 
