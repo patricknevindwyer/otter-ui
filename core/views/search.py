@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from core.views import util
 from core.models import Url
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def search(request):
     """
@@ -15,7 +17,7 @@ def search(request):
 
     # make sure we got a query param
     if not "query" in request.POST:
-        return render(request, "index.html", util.fillContext(opts, request))
+        return HttpResponseRedirect(reverse("index"))
     else:
 
         rawUrl = request.POST.get("query")

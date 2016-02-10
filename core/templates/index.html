@@ -10,7 +10,7 @@
             <h4>Recent Searches</h4>
         <ul>
             {% for url in recent %}
-            <li><a href="{% url 'lookup-details' url.uuid %}">{{ url.fqdn }}</a></li>
+            <li><a href="{% url 'fqdn-details' url.fqdn %}">{{ url.fqdn }}</a></li>
             {% endfor %}
         </ul>
     </div>
@@ -18,7 +18,7 @@
         <h4>Common Searches</h4>
         <ul>
             {% for url in common %}
-            <li><a href="{% url 'lookup-details' url.uuid %}">{{ url.fqdn }}</a> <span class="badge badge-info">{{ url.freq }}</span></li>
+            <li><a href="{% url 'fqdn-details' url.fqdn %}">{{ url.fqdn }}</a> <span class="badge badge-info">{{ url.freq }}</span></li>
             {% endfor %}
         </ul>
     </div>

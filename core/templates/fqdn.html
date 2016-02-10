@@ -1,0 +1,47 @@
+{% extends 'bootstrap.html' %}
+{% load humanize %}
+
+{% block content %}
+<br/>
+<br/>
+
+<div class="row">
+    <h1 class="page-header">{{ fqdn }}</h1>
+    <h2>{{ resolves.count }} lookups</h2>
+</div>
+
+<div class="row">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4 class="title">Lookup History</h4>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>DNS</th>
+                    <th>ASN</th>
+                    <th>Whois</th>
+                    <th>Has MX</th>
+                    <th>Has v6</th>
+                    <td/>
+                </tr>
+            </thead>
+            <tbody>
+            {% for resolve in resolves.all %}
+                <tr>
+                    <td>{{ resolve.queriedAt|naturaltime }}</td>
+                    <td>{% if resolve.dnsRecords.all|length > 0 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td>{% if resolve.asns.all|length > 0 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td>{% if resolve.whois.all|length > 0 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td>{% if resolve.hasMX %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td>{% if resolve.hasIPV6 %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+                    <td><a href="{% url 'lookup-details' resolve.uuid %}">Open</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

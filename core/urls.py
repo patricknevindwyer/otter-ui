@@ -1,16 +1,19 @@
 from django.conf.urls import url
-from .views import api, core, search, resolve, webhooks
+from .views import api, core, search, resolve, webhooks, fqdn
 
 urlpatterns = [
 
-    url(r'^$', core.index),
+    url(r'^$', core.index, name="index"),
     url(r'^ack/?$', api.ack),
 
     url(r'^search/?$', search.search, name="search"),
 
+    # FQDN routes
+    url(r'^fqdn/(?P<fqdn>[^/]+)/?$', fqdn.details, name="fqdn-details"),
+
     # lookups based on the target URL, which is base64'd
-    url(r'lookup/(?P<url_id>[a-zA-Z0-9\-]+)/?$', resolve.details, name="lookup-details"),
-    url(r'lookup/(?P<url>[a-zA-Z0-9\-\_\=]+)/new$', resolve.start, name="lookup-start"),
+    url(r'^lookup/(?P<url_id>[a-zA-Z0-9\-]+)/?$', resolve.details, name="lookup-details"),
+    url(r'^lookup/(?P<url>[a-zA-Z0-9\-\_\=]+)/new$', resolve.start, name="lookup-start"),
 
     # Webhooks
     url(r'^webhook/dns/(?P<uuid>[a-zA-Z0-9\-]+)/ready/?$', webhooks.dns, name="webhook-dns"),
