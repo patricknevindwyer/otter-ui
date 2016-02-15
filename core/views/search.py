@@ -42,9 +42,14 @@ def search(request):
         queryRoot = [Url.objects.filter(url = otterUrl.id()).order_by("-queriedAt").first()]
         queryCount = Url.objects.filter(url = otterUrl.id()).count()
 
+        # first time queries have no history
+        if None in queryRoot:
+            queryRoot.remove(None)
+
         opts["matches"] = queryRoot
         opts["query"] = otterUrl
         opts["queryCount"] = queryCount
 
+        print (queryRoot)
         return render(request, "search.html", util.fillContext(opts, request))
 
