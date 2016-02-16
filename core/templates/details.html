@@ -5,6 +5,10 @@
 <br/>
 
 <div class="row">
+    <div class="col-md-8 col-md-offset-2" id="alerts"></div>
+</div>
+
+<div class="row">
     <h1 class="page-header">{{ url.fqdn }} <small>{{ url.queriedAt }}</small></h1>
     <div class="col-md-4">
         <dl class="dl-horizontal">
@@ -99,16 +103,54 @@
 </div>
 {% endfor %}
 
+<script src="http://localhost:2222/socket.io/socket.io.js"></script>
 <script>
 $(
     function() {
-        var uuid = window.location.pathname.split("/")[2];
-        console.log("Connecting websocket");
-        socket = new WebSocket("ws://127.0.0.1:9000/uuid/" + uuid);
-        socket.onmessage = function(e) {
-            console.log("Got Websocket message");
-            console.log(e.data);
-        }
+        var socket = io("http://localhost:2222");
+        socket.on("connect",
+            function () {
+                console.log("[connected]");
+                socket.emit("subscribe", {channels: ["monitor", "uuid/343434", "fqdn/foo.com"]});
+            }
+        );
+        socket.on("start",
+            function (data) {
+                console.log("Start: " + data);
+            }
+        );
+
+        socket.on("monitor",
+            function (data) {
+                console.log("[monitor] %s", data);
+            }
+        );
+
+        socket.on("heartbeat",
+            function (data) {
+                console.log("[heartbeat]");
+            }
+        );
+
+        socket.on("update",
+            function (data) {
+                console.log("[update] channel: %s", data.channel);
+                console.log(data.msg);
+                addAlert(data.msg);
+            }
+        );
+
+        socket.on("join",
+            function (data) {
+                console.log("[join] channel: %s", data.channel);
+            }
+        );
      });
+
+function addAlert(msg) {
+    $("#alerts").html(
+    "<div class='alert alert-info' role='alert'>" + msg + "</div>"
+    );
+}
 </script>
 {% endblock %}

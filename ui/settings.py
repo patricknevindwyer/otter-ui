@@ -124,6 +124,7 @@ BOOTSTRAP3 = {
 
 # Control URLs
 COORDINATOR_URL = "http://localhost:3000/"
+CATFLAP_URL = "http://localhost:3333/"
 SERVICE_DNS_URL = "http://localhost:5000/"
 SERVICE_CACHEDDNS_URL = "http://localhost:6000/"
 SERVICE_GOOGLEDNS_URL = "http://localhost:7000/"

@@ -1,21 +1,19 @@
 
-# Websockets with Django Channels
+# Websockets with OtterSockets
 
-## Channels
-
-- Channel per resolution (UUID for resolve)
-- Channel per FQDN (recent updates/etc)
-- Channel for service level heartbeats
-
-
-## Running
-
-1. Start the websockets server (port 9000)
+0. Check that Redis is running
 
 ```sh
-source ../pyenv/ui/bin/activate
-python manage.py runwsserver
+./redis-server
 ```
+
+
+1. Make sure OtterSockets is running
+
+```sh
+export PORT=2222 && node otterSockets.js
+```
+
 
 2. Start the HTTP server (port 8000)
 
@@ -24,21 +22,3 @@ source ../pyenv/ui/bin/activate
 python manage.py runserver
 ```
 
-3. Start worker(s)
-
-```sh
-source ../pyenv/ui/bin/activate
-python manage.py runworker
-```
-
-## Resources
-
-http://channels.readthedocs.org/en/stable/getting-started.html
-
-https://github.com/andrewgodwin/channels/tree/0.8/channels
-
-http://www.slideshare.net/daikeren/django-channels
-
-https://github.com/daikeren/channel-example/blob/master/chat/chat/settings.py
-
-http://autobahn.ws/python/reference/autobahn.websocket.html

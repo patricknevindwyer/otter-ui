@@ -50,6 +50,9 @@ def dns(request, uuid):
         )
         dnsRecord.save()
         util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
+        print("Sending an Otter Sockets update message")
+        util.emitUUIDupdate(uuid, "Got updated DNS data")
+
     return HttpResponse("ok")
 
 def cachedDns(request, uuid):

@@ -4,6 +4,18 @@ from core.models import Url
 import base64
 import requests
 
+def emitUUIDupdate(uuid, msg):
+    """
+    Send an update message out to the Redis backend that links to the OtterSockets
+    websocket layer.
+
+    :param uuid:
+    :param msg:
+    :return:
+    """
+    requests.put(settings.CATFLAP_URL + "update/ui")
+
+
 def fillContext(opts, request):
     """
     Fill in the basic common data and elements we need for rendering.
