@@ -50,7 +50,6 @@ def dns(request, uuid):
         )
         dnsRecord.save()
         util.resolveIps(urlModel.uuid, dnsData["result"]["A"])
-
     return HttpResponse("ok")
 
 def cachedDns(request, uuid):

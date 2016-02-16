@@ -99,4 +99,16 @@
 </div>
 {% endfor %}
 
+<script>
+$(
+    function() {
+        var uuid = window.location.pathname.split("/")[2];
+        console.log("Connecting websocket");
+        socket = new WebSocket("ws://127.0.0.1:9000/uuid/" + uuid);
+        socket.onmessage = function(e) {
+            console.log("Got Websocket message");
+            console.log(e.data);
+        }
+     });
+</script>
 {% endblock %}

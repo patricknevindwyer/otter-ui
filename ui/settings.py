@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'bootstrap3',
     'core',
     'django.contrib.humanize'
@@ -143,16 +142,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     '/var/www/static/',
 ]
-
-
-CHANNEL_BACKENDS = {
-    "default": {
-        "BACKEND": "channels.backends.database.DatabaseChannelBackend",
-        "ROUTING": {
-            "websocket.connect": "core.consumers.ws_add",
-            "websocket.keepalive": "core.consumers.ws_add",
-            "websocket.receive": "core.consumers.ws_message",
-            "websocket.disconnect": "core.consumers.ws_disconnect"
-        }
-    },
-}
